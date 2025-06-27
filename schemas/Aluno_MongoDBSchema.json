@@ -1,0 +1,63 @@
+{
+  "$jsonSchema" : {
+    "bsonType" : "object",
+    "properties" : {
+      "nascimento" : {
+        "bsonType" : "date"
+      },
+      "situacao" : {
+        "bsonType" : "array",
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "cdMateria" : {
+              "bsonType" : "long"
+            },
+            "dataColeta" : {
+              "bsonType" : "date"
+            },
+            "dataInicio" : {
+              "bsonType" : "date"
+            },
+            "descSituacao" : {
+              "bsonType" : "string"
+            },
+            "dataFinal" : {
+              "bsonType" : "date"
+            }
+          }
+        }
+      },
+      "racaCor" : {
+        "bsonType" : "string"
+      },
+      "paisNasc" : {
+        "bsonType" : "string"
+      },
+      "_id" : {
+        "bsonType" : "objectId"
+      },
+      "cadastro" : {
+        "bsonType" : "long"
+      },
+      "sexo" : {
+        "bsonType" : "string"
+      },
+      "turma" : {
+        "bsonType" : "object",
+        "properties" : {
+          "nomeEsc" : {
+            "bsonType" : "string"
+          },
+          "nomeTurma" : {
+            "bsonType" : "string"
+          }
+        }
+      },
+      "nee" : {
+        "bsonType" : "string"
+      }
+    },
+    "title" : "aluno"
+  }
+}

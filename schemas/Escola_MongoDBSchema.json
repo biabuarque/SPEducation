@@ -1,0 +1,78 @@
+{
+  "$jsonSchema" : {
+    "bsonType" : "object",
+    "properties" : {
+      "rede" : {
+        "bsonType" : "string"
+      },
+      "nomeDistrito" : {
+        "bsonType" : "string"
+      },
+      "dre" : {
+        "bsonType" : "string"
+      },
+      "ambientes" : {
+        "bsonType" : "array",
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "codAmb" : {
+              "bsonType" : "long"
+            },
+            "capacidade" : {
+              "bsonType" : "string"
+            },
+            "descAmb" : {
+              "bsonType" : "string"
+            },
+            "metragem" : {
+              "bsonType" : "string"
+            }
+          }
+        }
+      },
+      "nomeEsc" : {
+        "bsonType" : "string"
+      },
+      "_id" : {
+        "bsonType" : "objectId"
+      },
+      "tipoEsc" : {
+        "bsonType" : "string"
+      },
+      "parceria" : {
+        "bsonType" : "object",
+        "properties" : {
+          "protocolo" : {
+            "bsonType" : "string"
+          },
+          "oscCnpj" : {
+            "bsonType" : "string"
+          },
+          "valorMensal" : {
+            "bsonType" : "double"
+          },
+          "valorMensalIptu" : {
+            "bsonType" : "double"
+          },
+          "verbaLocacao" : {
+            "bsonType" : "double"
+          },
+          "dataTermino" : {
+            "bsonType" : "date"
+          },
+          "dataInicio" : {
+            "bsonType" : "date"
+          }
+        }
+      },
+      "codInep" : {
+        "bsonType" : "long"
+      },
+      "subpref" : {
+        "bsonType" : "string"
+      }
+    },
+    "title" : "escola"
+  }
+}

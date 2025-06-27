@@ -1,0 +1,57 @@
+{
+  "$jsonSchema" : {
+    "bsonType" : "object",
+    "properties" : {
+      "etapaEnsino" : {
+        "bsonType" : "string"
+      },
+      "vagas" : {
+        "bsonType" : "int"
+      },
+      "serie" : {
+        "bsonType" : "object",
+        "properties" : {
+          "descricaoSerie" : {
+            "bsonType" : "string"
+          },
+          "codSerie" : {
+            "bsonType" : "long"
+          },
+          "modalidade" : {
+            "bsonType" : "string"
+          }
+        }
+      },
+      "tipoTurma" : {
+        "bsonType" : "string"
+      },
+      "nomeEsc" : {
+        "bsonType" : "string"
+      },
+      "_id" : {
+        "bsonType" : "objectId"
+      },
+      "turno" : {
+        "bsonType" : "object",
+        "properties" : {
+          "descricaoTurno" : {
+            "bsonType" : "string"
+          },
+          "codTurno" : {
+            "bsonType" : "long"
+          }
+        }
+      },
+      "matriculados" : {
+        "bsonType" : "int"
+      },
+      "cicloEnsino" : {
+        "bsonType" : "string"
+      },
+      "nomeTurma" : {
+        "bsonType" : "string"
+      }
+    },
+    "title" : "turma"
+  }
+}

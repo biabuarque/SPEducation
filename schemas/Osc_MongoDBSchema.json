@@ -1,0 +1,60 @@
+{
+  "$jsonSchema" : {
+    "bsonType" : "object",
+    "properties" : {
+      "parcerias" : {
+        "bsonType" : "array",
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "protocolo" : {
+              "bsonType" : "string"
+            },
+            "valorMensal" : {
+              "bsonType" : "double"
+            },
+            "valorMensalIptu" : {
+              "bsonType" : "double"
+            },
+            "verbaLocacao" : {
+              "bsonType" : "double"
+            },
+            "dataTermino" : {
+              "bsonType" : "date"
+            },
+            "dataInicio" : {
+              "bsonType" : "date"
+            },
+            "escolas" : {
+              "bsonType" : "array",
+              "items" : {
+                "bsonType" : "object",
+                "properties" : {
+                  "nomeDistrito" : {
+                    "bsonType" : "string"
+                  },
+                  "nomeEsc" : {
+                    "bsonType" : "string"
+                  },
+                  "codInep" : {
+                    "bsonType" : "long"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "nome" : {
+        "bsonType" : "string"
+      },
+      "_id" : {
+        "bsonType" : "objectId"
+      },
+      "cnpj" : {
+        "bsonType" : "string"
+      }
+    },
+    "title" : "osc"
+  }
+}
