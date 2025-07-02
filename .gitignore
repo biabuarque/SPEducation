@@ -1,1 +1,5 @@
 .env
+datasets/alunos.json
+datasets/escolas.json
+datasets/osc.json
+datasets/turmas.json
