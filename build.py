@@ -7,71 +7,69 @@ from dotenv import load_dotenv
 load_dotenv()
 uri = os.getenv("MONGODB_URI")
 
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient("mongodb://localhost:27017/")
 db = client['education']
 
-#Define JSON Schema for the "aluno" collection
 aluno_json_schema = {
-                "$jsonSchema" : {
-                    "bsonType" : "object",
-                    "properties" : {
-                    "nascimento" : {
-                        "bsonType" : "date"
+                "$jsonSchema": {
+                  "bsonType": "object",
+                  "title": "aluno",
+                  "required": ["id_aluno", "cadastro"],
+                  "properties": {
+                    "id_aluno": {
+                      "bsonType": ["objectId", "int"]
                     },
-                    "situacao" : {
-                        "bsonType" : "array",
-                        "items" : {
-                        "bsonType" : "object",
-                        "properties" : {
-                            "cdMateria" : {
-                            "bsonType" : "long"
-                            },
-                            "dataColeta" : {
-                            "bsonType" : "date"
-                            },
-                            "dataInicio" : {
-                            "bsonType" : "date"
-                            },
-                            "descSituacao" : {
-                            "bsonType" : "string"
-                            },
-                            "dataFinal" : {
-                            "bsonType" : "date"
-                            }
+                    "cadastro": {
+                      "bsonType": ["long", "int"]
+                    },
+                    "data_nasc": {
+                      "bsonType": ["date", "string", "null"]
+                    },
+                    "raca_cor": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "pais_nasc": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "sexo": {
+                      "bsonType":["string", "null"]
+                    },
+                    "nee": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "turmas": {
+                      "bsonType": ["array", "null"],
+                      "items": {
+                        "bsonType": "object",
+                        "required": ["cd_mat", "data_sit", "situacao_mat", "id_turma"],
+                        "properties": {
+                          "cd_mat": {
+                            "bsonType": ["long", "int"]
+                          },
+                          "data_sit": {
+                            "bsonType": ["date", "string", "null"]
+                          },
+                          "situacao_mat": {
+                            "bsonType":  ["string", "null"]
+                          },
+                          "id_turma": {
+                            "bsonType": ["long", "int"]
+                          }
                         }
+                      }
+                    },
+                    "escola": {
+                      "bsonType": ["array", "null"],
+                      "items": {
+                        "bsonType": "object",
+                        "properties": {
+                          "nome_escola": {
+                            "bsonType": ["string", "null"]
+                          }
                         }
-                    },
-                    "racaCor" : {
-                        "bsonType" : "string"
-                    },
-                    "paisNasc" : {
-                        "bsonType" : "string"
-                    },
-                    "_id" : {
-                        "bsonType" : "objectId"
-                    },
-                    "cadastro" : {
-                        "bsonType" : "long"
-                    },
-                    "sexo" : {
-                        "bsonType" : "string"
-                    },
-                    "turma" : {
-                        "bsonType" : "object",
-                        "properties" : {
-                        "nomeEsc" : {
-                            "bsonType" : "string"
-                        },
-                        "nomeTurma" : {
-                            "bsonType" : "string"
-                        }
-                        }
-                    },
-                    "nee" : {
-                        "bsonType" : "string"
+                      }
                     }
-                    },
-                    "title" : "aluno"
+                  }
                 }
     }
 
@@ -87,74 +85,74 @@ escola_json_schema = {
     "bsonType" : "object",
     "properties" : {
       "rede" : {
-        "bsonType" : "string"
+        "bsonType" : ["string", "null"]
       },
-      "nomeDistrito" : {
-        "bsonType" : "string"
+      "nome_distrito" : {
+        "bsonType" : ["string", "null"]
       },
       "dre" : {
-        "bsonType" : "string"
+        "bsonType" : ["string", "null"]
       },
       "ambientes" : {
-        "bsonType" : "array",
+        "bsonType" : ["array", "null"],
         "items" : {
           "bsonType" : "object",
           "properties" : {
-            "codAmb" : {
-              "bsonType" : "long"
+            "codAmbiente" : {
+              "bsonType" : ["long", "int", "null"]
             },
             "capacidade" : {
-              "bsonType" : "string"
+              "bsonType" : ["string", "null"]
             },
             "descAmb" : {
-              "bsonType" : "string"
+              "bsonType" : ["string", "null"]
             },
             "metragem" : {
-              "bsonType" : "string"
+              "bsonType" : ["string", "null"]
             }
           }
         }
       },
-      "nomeEsc" : {
-        "bsonType" : "string"
+      "nome_esc" : {
+        "bsonType" : ["string", "null"]
       },
-      "_id" : {
-        "bsonType" : "objectId"
+      "tipo_esc" : {
+        "bsonType" : ["string", "null"]
       },
-      "tipoEsc" : {
-        "bsonType" : "string"
-      },
-      "parceria" : {
-        "bsonType" : "object",
-        "properties" : {
-          "protocolo" : {
-            "bsonType" : "string"
-          },
-          "oscCnpj" : {
-            "bsonType" : "string"
-          },
-          "valorMensal" : {
-            "bsonType" : "double"
-          },
-          "valorMensalIptu" : {
-            "bsonType" : "double"
-          },
-          "verbaLocacao" : {
-            "bsonType" : "double"
-          },
-          "dataTermino" : {
-            "bsonType" : "date"
-          },
-          "dataInicio" : {
-            "bsonType" : "date"
+      "parcerias" : {
+        "bsonType" : ["array", "null"],
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "protocolo" : {
+              "bsonType" : ["string", "null"]
+            },
+            "osc_cnpj" : {
+              "bsonType" : ["string", "null"]
+            },
+            "valor_mensal" : {
+              "bsonType" : ["double", "int", "null"]
+            },
+            "valor_mensal_iptu" : {
+              "bsonType" : ["double", "int", "null"]
+            },
+            "verba_locação" : {
+              "bsonType" : ["double", "int", "null"]
+            },
+            "data_termino" : {
+              "bsonType" : ["date", "string", "null"]
+            },
+            "data_inicio" : {
+              "bsonType" : ["date", "string", "null"]
+            }
           }
         }
       },
-      "codInep" : {
-        "bsonType" : "long"
+      "cod_inep" : {
+        "bsonType" : ["long", "int", "null"]
       },
       "subpref" : {
-        "bsonType" : "string"
+        "bsonType" : ["string", "null"]
       }
     },
     "title" : "escola"
@@ -172,57 +170,55 @@ osc_json_schema = {
   "$jsonSchema" : {
     "bsonType" : "object",
     "properties" : {
-      "parcerias" : {
-        "bsonType" : "array",
+      "nome_osc" : {
+        "bsonType" : ["string", "null"]
+      },
+      "cnpj" : {
+        "bsonType" : ["string", "null"]
+      },
+      "protocolo" : {
+        "bsonType" : ["string", "null"]
+      },
+      "valor_mensal" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "valor_mensal_iptu" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "verba_locacao" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "data_inicio" : {
+        "bsonType" : ["date", "string", "null"]
+      },
+      "data_fim" : {
+        "bsonType" : ["date", "string", "null"]
+      },
+      "escolas" : {
+        "bsonType" : ["array", "null"],
         "items" : {
           "bsonType" : "object",
           "properties" : {
-            "protocolo" : {
-              "bsonType" : "string"
+            "nome_esc" : {
+              "bsonType" : ["string", "null"]
             },
-            "valorMensal" : {
-              "bsonType" : "double"
+            "tipo_esc" : {
+              "bsonType" : ["string", "null"]
             },
-            "valorMensalIptu" : {
-              "bsonType" : "double"
+            "rede" : {
+              "bsonType" : ["string", "null"]
             },
-            "verbaLocacao" : {
-              "bsonType" : "double"
+            "nome_distrito" : {
+              "bsonType" : ["string", "null"]
             },
-            "dataTermino" : {
-              "bsonType" : "date"
+            "dre" : {
+              "bsonType" : ["string", "null"]
             },
-            "dataInicio" : {
-              "bsonType" : "date"
-            },
-            "escolas" : {
-              "bsonType" : "array",
-              "items" : {
-                "bsonType" : "object",
-                "properties" : {
-                  "nomeDistrito" : {
-                    "bsonType" : "string"
-                  },
-                  "nomeEsc" : {
-                    "bsonType" : "string"
-                  },
-                  "codInep" : {
-                    "bsonType" : "long"
-                  }
-                }
-              }
+            "subpref" : {
+              "bsonType" : ["string", "null"]
             }
           }
         }
-      },
-      "nome" : {
-        "bsonType" : "string"
-      },
-      "_id" : {
-        "bsonType" : "objectId"
-      },
-      "cnpj" : {
-        "bsonType" : "string"
       }
     },
     "title" : "osc"
@@ -235,59 +231,68 @@ if 'osc' in db.list_collection_names():
 # Create the collection with schema validation
 db.create_collection('osc', validator=osc_json_schema)
 
-#Define JSON Schema for the "turma" collection
 turma_json_schema = {
   "$jsonSchema" : {
     "bsonType" : "object",
     "properties" : {
-      "etapaEnsino" : {
-        "bsonType" : "string"
+      "id_turma" : {
+        "bsonType" : ["long", "int"]
       },
-      "vagas" : {
-        "bsonType" : "int"
+      "nome_turma" : {
+        "bsonType" : ["string", "null"]
       },
-      "serie" : {
-        "bsonType" : "object",
-        "properties" : {
-          "descricaoSerie" : {
-            "bsonType" : "string"
-          },
-          "codSerie" : {
-            "bsonType" : "long"
-          },
-          "modalidade" : {
-            "bsonType" : "string"
-          }
-        }
+      "nome_esc" : {
+        "bsonType" : ["string", "null"]
       },
-      "tipoTurma" : {
-        "bsonType" : "string"
+      "desc_turno" : {
+        "bsonType" : ["string", "null"]
       },
-      "nomeEsc" : {
-        "bsonType" : "string"
+      "desc_serie" : {
+        "bsonType" : ["string", "null"]
       },
-      "_id" : {
-        "bsonType" : "objectId"
+      "cod_turno" : {
+        "bsonType" : ["long", "int", "null"]
       },
-      "turno" : {
-        "bsonType" : "object",
-        "properties" : {
-          "descricaoTurno" : {
-            "bsonType" : "string"
-          },
-          "codTurno" : {
-            "bsonType" : "long"
-          }
-        }
+      "cod_serie" : {
+        "bsonType" : ["long", "int", "null"]
       },
       "matriculados" : {
-        "bsonType" : "int"
+        "bsonType" : ["int", "null"]
       },
-      "cicloEnsino" : {
-        "bsonType" : "string"
+      "vagas" : {
+        "bsonType" : ["int", "null"]
       },
-      "nomeTurma" : {
-        "bsonType" : "string"
+      "ano_letivo" : {
+        "bsonType" : ["int", "null"]
+      },
+      "tipo_turma" : {
+        "bsonType" : ["string", "null"]
+      },
+      "etapa_ensino" : {
+        "bsonType" : ["string", "null"]
+      },
+      "ciclo_ensino" : {
+        "bsonType" : ["string", "null"]
+      },
+      "alunos" : {
+        "bsonType" : ["array", "null"],
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "id_aluno" : {
+              "bsonType" : ["long", "int"]
+            },
+            "cd_mat" : {
+              "bsonType" : ["long", "int"]
+            },
+            "data_sit" : {
+              "bsonType" : ["date", "string", "null"]
+            },
+            "situacao_mat" : {
+              "bsonType" : ["string", "null"]
+            }
+          }
+        }
       }
     },
     "title" : "turma"

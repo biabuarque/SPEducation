@@ -1,10 +1,11 @@
 import pandas as pd
 from pymongo import MongoClient
 from datetime import datetime
+import json
 
 # Connect to MongoDB
 client = MongoClient('mongodb://localhost:27017/')
-db = client['your_database']  # Replace 'your_database' with your database name
+db = client['education']  # Replace 'your_database' with your database name
 
 # Define collections for each entity
 aluno_collection = db['aluno']
@@ -19,77 +20,68 @@ def process_date(date_str):
     except:
         return None
 
-# Function to process a CSV and insert data into MongoDB
-def populate_collection(csv_path, collection, schema_mapping):
-    # Read the CSV into a pandas dataframe
-    df = pd.read_csv(csv_path, delimiter=";", encoding="utf-8-sig")
-    
-    # Iterate over each row and map the data to the MongoDB schema
-    for _, row in df.iterrows():
-        document = {}
-        
-        # Map each column in the CSV to the document structure defined by the schema
-        for field, mongo_field in schema_mapping.items():
-            value = row.get(field)
+# Function to process a json file and insert data into MongoDB
+def populate_collection(json_path, collection, schema_mapping):
+
+    # Read the json file where each line is a JSON object
+    schema_mapping = schema_mapping['$jsonSchema']['properties']
+    with open(json_path, 'r') as file:
+        counter = 0
+        line_count = sum(1 for _ in open(json_path, 'r'))  # Count the number of lines in the file
+
+        for line in file:
+            print(f"Processing line {counter + 1} of {line_count} in {json_path}... {counter/line_count * 100:.2f}% complete", end='\r')
+            counter += 1
+            data = json.loads(line)
+
+            # Process each field according to the schema mapping
+            for field, properties in schema_mapping.items():
+                if field in data:
+                    types_now = properties.get('bsonType')
+                    # Convert date strings to datetime objects
+                    if ('date' in types_now) and isinstance(data[field], str):
+                        data[field] = process_date(data[field])
+                    
+                    # Convert numeric fields to appropriate types
+                    if ("int" in (types_now) or "long" in types_now) and isinstance(data[field], str):
+                        try:
+                            data[field] = int(data[field])
+                        except ValueError:
+                            data[field] = None
+                        
+                    if "array" in types_now and isinstance(data[field], list):
+                        # Process each item in the array if it is an object
+                        for item in data[field]:
+                            if isinstance(item, dict):
+                                for sub_field, sub_properties in properties.get('items', {}).get('properties', {}).items():
+                                    if sub_field in item:
+                                        sub_types_now = sub_properties.get('bsonType')
+                                        # Convert date strings to datetime objects
+                                        if ('date' in sub_types_now) and isinstance(item[sub_field], str):
+                                            item[sub_field] = process_date(item[sub_field])
+                                        
+                                        # Convert numeric fields to appropriate types
+                                        if ("int" in (sub_types_now) or "long" in sub_types_now) and isinstance(item[sub_field], str):
+                                            try:
+                                                item[sub_field] = int(item[sub_field])
+                                            except ValueError:
+                                                item[sub_field] = None
             
-            # If the field should be a date, process it
-            if mongo_field.get('bsonType') == 'date':
-                value = process_date(value)
-            
-            document[mongo_field['name']] = value
-        
-        # Insert the document into MongoDB
-        collection.insert_one(document)
+            # Insert the processed data into the collection
+            collection.insert_one(data)
+
 
 # Define schema mappings for each collection
-aluno_schema = {
-    "nascimento": {"name": "nascimento", "bsonType": "date"},
-    "situacao": {"name": "situacao", "bsonType": "array"},
-    "racaCor": {"name": "racaCor", "bsonType": "string"},
-    "paisNasc": {"name": "paisNasc", "bsonType": "string"},
-    "cadastro": {"name": "cadastro", "bsonType": "long"},
-    "sexo": {"name": "sexo", "bsonType": "string"},
-    "turma": {"name": "turma", "bsonType": "object"},
-    "nee": {"name": "nee", "bsonType": "string"}
-}
-
-escola_schema = {
-    "rede": {"name": "rede", "bsonType": "string"},
-    "nomeDistrito": {"name": "nomeDistrito", "bsonType": "string"},
-    "dre": {"name": "dre", "bsonType": "string"},
-    "ambientes": {"name": "ambientes", "bsonType": "array"},
-    "nomeEsc": {"name": "nomeEsc", "bsonType": "string"},
-    "tipoEsc": {"name": "tipoEsc", "bsonType": "string"},
-    "parceria": {"name": "parceria", "bsonType": "object"},
-    "codInep": {"name": "codInep", "bsonType": "long"},
-    "subpref": {"name": "subpref", "bsonType": "string"}
-}
-
-osc_schema = {
-    "parcerias": {"name": "parcerias", "bsonType": "array"},
-    "nome": {"name": "nome", "bsonType": "string"},
-    "_id": {"name": "_id", "bsonType": "objectId"},
-    "cnpj": {"name": "cnpj", "bsonType": "string"}
-}
-
-turma_schema = {
-    "etapaEnsino": {"name": "etapaEnsino", "bsonType": "string"},
-    "vagas": {"name": "vagas", "bsonType": "int"},
-    "serie": {"name": "serie", "bsonType": "object"},
-    "tipoTurma": {"name": "tipoTurma", "bsonType": "string"},
-    "nomeEsc": {"name": "nomeEsc", "bsonType": "string"},
-    "_id": {"name": "_id", "bsonType": "objectId"},
-    "turno": {"name": "turno", "bsonType": "object"},
-    "matriculados": {"name": "matriculados", "bsonType": "int"},
-    "cicloEnsino": {"name": "cicloEnsino", "bsonType": "string"},
-    "nomeTurma": {"name": "nomeTurma", "bsonType": "string"}
-}
+aluno_schema = json.load(open("schemas/Aluno_MongoDBSchema.json"))
+escola_schema = json.load(open("schemas/Escola_MongoDBSchema.json"))
+osc_schema = json.load(open("schemas/Osc_MongoDBSchema.json"))
+turma_schema = json.load(open("schemas/Turma_MongoDBSchema.json"))
 
 # Populate each collection
-populate_collection('datasets/matriculas.csv', aluno_collection, aluno_schema)
-populate_collection('datasets/turmas.csv', turma_collection, turma_schema)
-populate_collection('datasets/parcerias.csv', osc_collection, osc_schema)
-populate_collection('datasets/escolas.csv', escola_collection, escola_schema)
+populate_collection('datasets/alunos.json', aluno_collection, aluno_schema)
+populate_collection('datasets/turmas.json', turma_collection, turma_schema)
+populate_collection('datasets/osc.json', osc_collection, osc_schema)
+populate_collection('datasets/escolas.json', escola_collection, escola_schema)
 
 # Close MongoDB connection
 client.close()
