@@ -1,63 +1,62 @@
 {
-  "$jsonSchema" : {
-    "bsonType" : "object",
-    "properties" : {
-      "nascimento" : {
-        "bsonType" : "date"
-      },
-      "situacao" : {
-        "bsonType" : "array",
-        "items" : {
-          "bsonType" : "object",
-          "properties" : {
-            "cdMateria" : {
-              "bsonType" : "long"
-            },
-            "dataColeta" : {
-              "bsonType" : "date"
-            },
-            "dataInicio" : {
-              "bsonType" : "date"
-            },
-            "descSituacao" : {
-              "bsonType" : "string"
-            },
-            "dataFinal" : {
-              "bsonType" : "date"
-            }
-          }
-        }
-      },
-      "racaCor" : {
-        "bsonType" : "string"
-      },
-      "paisNasc" : {
-        "bsonType" : "string"
-      },
-      "_id" : {
-        "bsonType" : "objectId"
-      },
-      "cadastro" : {
-        "bsonType" : "long"
-      },
-      "sexo" : {
-        "bsonType" : "string"
-      },
-      "turma" : {
-        "bsonType" : "object",
-        "properties" : {
-          "nomeEsc" : {
-            "bsonType" : "string"
-          },
-          "nomeTurma" : {
-            "bsonType" : "string"
-          }
-        }
-      },
-      "nee" : {
-        "bsonType" : "string"
-      }
-    },
-    "title" : "aluno"
-  }
-}
+                "$jsonSchema": {
+                  "bsonType": "object",
+                  "title": "aluno",
+                  "required": ["id_aluno", "cadastro"],
+                  "properties": {
+                    "id_aluno": {
+                      "bsonType": ["objectId", "int"]
+                    },
+                    "cadastro": {
+                      "bsonType": ["long", "int"]
+                    },
+                    "data_nasc": {
+                      "bsonType": ["date", "string", "null"]
+                    },
+                    "raca_cor": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "pais_nasc": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "sexo": {
+                      "bsonType":["string", "null"]
+                    },
+                    "nee": {
+                      "bsonType": ["string", "null"]
+                    },
+                    "turmas": {
+                      "bsonType": ["array", "null"],
+                      "items": {
+                        "bsonType": "object",
+                        "required": ["cd_mat", "data_sit", "situacao_mat", "id_turma"],
+                        "properties": {
+                          "cd_mat": {
+                            "bsonType": ["long", "int"]
+                          },
+                          "data_sit": {
+                            "bsonType": ["date", "string", "null"]
+                          },
+                          "situacao_mat": {
+                            "bsonType":  ["string", "null"]
+                          },
+                          "id_turma": {
+                            "bsonType": ["long", "int"]
+                          }
+                        }
+                      }
+                    },
+                    "escola": {
+                      "bsonType": ["array", "null"],
+                      "items": {
+                        "bsonType": "object",
+                        "properties": {
+                          "nome_escola": {
+                            "bsonType": ["string", "null"]
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+    }

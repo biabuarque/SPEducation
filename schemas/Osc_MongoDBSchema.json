@@ -2,57 +2,55 @@
   "$jsonSchema" : {
     "bsonType" : "object",
     "properties" : {
-      "parcerias" : {
-        "bsonType" : "array",
+      "nome_osc" : {
+        "bsonType" : ["string", "null"]
+      },
+      "cnpj" : {
+        "bsonType" : ["string", "null"]
+      },
+      "protocolo" : {
+        "bsonType" : ["string", "null"]
+      },
+      "valor_mensal" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "valor_mensal_iptu" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "verba_locacao" : {
+        "bsonType" : ["double", "int", "null"]
+      },
+      "data_inicio" : {
+        "bsonType" : ["date", "string", "null"]
+      },
+      "data_fim" : {
+        "bsonType" : ["date", "string", "null"]
+      },
+      "escolas" : {
+        "bsonType" : ["array", "null"],
         "items" : {
           "bsonType" : "object",
           "properties" : {
-            "protocolo" : {
-              "bsonType" : "string"
+            "nome_esc" : {
+              "bsonType" : ["string", "null"]
             },
-            "valorMensal" : {
-              "bsonType" : "double"
+            "tipo_esc" : {
+              "bsonType" : ["string", "null"]
             },
-            "valorMensalIptu" : {
-              "bsonType" : "double"
+            "rede" : {
+              "bsonType" : ["string", "null"]
             },
-            "verbaLocacao" : {
-              "bsonType" : "double"
+            "nome_distrito" : {
+              "bsonType" : ["string", "null"]
             },
-            "dataTermino" : {
-              "bsonType" : "date"
+            "dre" : {
+              "bsonType" : ["string", "null"]
             },
-            "dataInicio" : {
-              "bsonType" : "date"
-            },
-            "escolas" : {
-              "bsonType" : "array",
-              "items" : {
-                "bsonType" : "object",
-                "properties" : {
-                  "nomeDistrito" : {
-                    "bsonType" : "string"
-                  },
-                  "nomeEsc" : {
-                    "bsonType" : "string"
-                  },
-                  "codInep" : {
-                    "bsonType" : "long"
-                  }
-                }
-              }
+            "subpref" : {
+              "bsonType" : ["string", "null"]
             }
           }
         }
-      },
-      "nome" : {
-        "bsonType" : "string"
-      },
-      "_id" : {
-        "bsonType" : "objectId"
-      },
-      "cnpj" : {
-        "bsonType" : "string"
       }
     },
     "title" : "osc"

@@ -2,54 +2,64 @@
   "$jsonSchema" : {
     "bsonType" : "object",
     "properties" : {
-      "etapaEnsino" : {
-        "bsonType" : "string"
+      "id_turma" : {
+        "bsonType" : ["long", "int"]
       },
-      "vagas" : {
-        "bsonType" : "int"
+      "nome_turma" : {
+        "bsonType" : ["string", "null"]
       },
-      "serie" : {
-        "bsonType" : "object",
-        "properties" : {
-          "descricaoSerie" : {
-            "bsonType" : "string"
-          },
-          "codSerie" : {
-            "bsonType" : "long"
-          },
-          "modalidade" : {
-            "bsonType" : "string"
-          }
-        }
+      "nome_esc" : {
+        "bsonType" : ["string", "null"]
       },
-      "tipoTurma" : {
-        "bsonType" : "string"
+      "desc_turno" : {
+        "bsonType" : ["string", "null"]
       },
-      "nomeEsc" : {
-        "bsonType" : "string"
+      "desc_serie" : {
+        "bsonType" : ["string", "null"]
       },
-      "_id" : {
-        "bsonType" : "objectId"
+      "cod_turno" : {
+        "bsonType" : ["long", "int", "null"]
       },
-      "turno" : {
-        "bsonType" : "object",
-        "properties" : {
-          "descricaoTurno" : {
-            "bsonType" : "string"
-          },
-          "codTurno" : {
-            "bsonType" : "long"
-          }
-        }
+      "cod_serie" : {
+        "bsonType" : ["long", "int", "null"]
       },
       "matriculados" : {
-        "bsonType" : "int"
+        "bsonType" : ["int", "null"]
       },
-      "cicloEnsino" : {
-        "bsonType" : "string"
+      "vagas" : {
+        "bsonType" : ["int", "null"]
       },
-      "nomeTurma" : {
-        "bsonType" : "string"
+      "ano_letivo" : {
+        "bsonType" : ["int", "null"]
+      },
+      "tipo_turma" : {
+        "bsonType" : ["string", "null"]
+      },
+      "etapa_ensino" : {
+        "bsonType" : ["string", "null"]
+      },
+      "ciclo_ensino" : {
+        "bsonType" : ["string", "null"]
+      },
+      "alunos" : {
+        "bsonType" : ["array", "null"],
+        "items" : {
+          "bsonType" : "object",
+          "properties" : {
+            "id_aluno" : {
+              "bsonType" : ["long", "int"]
+            },
+            "cd_mat" : {
+              "bsonType" : ["long", "int"]
+            },
+            "data_sit" : {
+              "bsonType" : ["date", "string", "null"]
+            },
+            "situacao_mat" : {
+              "bsonType" : ["string", "null"]
+            }
+          }
+        }
       }
     },
     "title" : "turma"
