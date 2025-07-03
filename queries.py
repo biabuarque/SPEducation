@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 uri = os.getenv("MONGODB_URI")
 # Create a new client and connect to the server
-client = MongoClient(uri, server_api=ServerApi('1'))
+client = MongoClient('mongodb://localhost:27017/')
 db = client['education']
 
 collection = db['escola']
@@ -34,29 +34,29 @@ pipelines = [
     [
         {"$lookup": {
             "from": "escola",
-            "localField": "turma.nomeEsc",
-            "foreignField": "nomeEsc",
+            "localField": "escola.nome_esc",
+            "foreignField": "nome_esc",
             "as": "escola"}
         },
         {"$unwind": "$escola"},
         {"$match": {"escola.dre": {"$ne": None}}},
         {"$group": {
-            "_id": {"dre": "$escola.dre",  "race": "$racaCor", "birth_country": "$paisNasc"},
+            "_id": {"dre": "$escola.dre",  "race": "$raca_cor", "birth_country": "$pais_nasc"},
             "total_students": {"$sum": 1}}},
         {"$sort": {"total_students": -1}},
         {"$project": {
-            "total_students": 1,
             "birth_country": "$_id.birth_country",
             "race": "$_id.race",
             "dre": "$_id.dre",
+            "total_students": 1,
             "_id": 0
         }}
     ],
     # QUERY 2
     [   {"$lookup": {
             "from": "escola",
-            "localField": "turma.nomeEsc",
-            "foreignField": "nomeEsc",
+            "localField": "escola.nome_esc",
+            "foreignField": "nome_esc",
             "as": "escola"}
         },
         {"$unwind": "$escola"},
@@ -77,8 +77,8 @@ pipelines = [
     [
         {"$lookup": {
             "from": "escola",
-            "localField": "nomeEsc",
-            "foreignField": "nomeEsc",
+            "localField": "nome_esc",
+            "foreignField": "nome_esc",
             "as": "escola"
         }},
         {"$unwind": "$escola"},
@@ -91,7 +91,7 @@ pipelines = [
             }
         }},
         {"$group": {
-            "_id": {"dre": "$escola.dre", "school": "$nomeEsc"},
+            "_id": {"dre": "$escola.dre", "school": "$nome_esc"},
             "open_spaces": {"$first": "$open_spaces"}
         }},
         {"$project": {
@@ -106,7 +106,7 @@ pipelines = [
     [   
         {"$lookup": {
             "from": "osc",
-            "localField": "parceria.oscCnpj",
+            "localField": "parceria.osc_cnpj",
             "foreignField": "cnpj",
             "as": "osc"}
         },
@@ -128,8 +128,8 @@ pipelines = [
     #   QUERY 5
      [  {"$lookup": {
             "from": "escola",
-            "localField": "turma.nomeEsc",
-            "foreignField": "nomeEsc",
+            "localField": "turma.nome_esc",
+            "foreignField": "nome_esc",
             "as": "escola"}
         },
         {"$unwind": "$escola"},
@@ -153,7 +153,7 @@ pipelines = [
         }},
         {"$group": {
             "dre": {"$first": "$escola.dre"},
-            "_id": "$turma.nomeEsc",
+            "_id": "$turma.nome_esc",
             "average_age": {"$avg": "$age"}  
         }},
         {"$project": {
