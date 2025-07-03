@@ -34,16 +34,33 @@ pipelines = [
     [
         {"$lookup": {
             "from": "escola",
-            "localField": "escola.nome_esc",
-            "foreignField": "nome_esc",
-            "as": "escola"}
-        },
-        {"$unwind": "$escola"},
-        {"$match": {"escola.dre": {"$ne": None}}},
+            "let": { "escolaNames": {
+                "$map": {
+                    "input": { "$ifNull": ["$escolas", []] },
+                    "as": "esc",
+                    "in": "$$esc.nome_esc"
+                }}
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {"$in": ["$nome_esc", "$$escolaNames"]} 
+                    }
+                }
+            ],
+            "as": "escola"
+        }},
+        { "$unwind": "$escola" },
+        { "$match": { "escola.dre": { "$ne": None } } },
         {"$group": {
-            "_id": {"dre": "$escola.dre",  "race": "$raca_cor", "birth_country": "$pais_nasc"},
-            "total_students": {"$sum": 1}}},
-        {"$sort": {"total_students": -1}},
+            "_id": {
+                "dre": "$escola.dre",
+                "race": "$raca_cor",
+                "birth_country": "$pais_nasc"
+            },
+            "total_students": { "$sum": 1 }
+        }},
+        { "$sort": { "total_students": -1 } },
         {"$project": {
             "birth_country": "$_id.birth_country",
             "race": "$_id.race",
@@ -55,8 +72,20 @@ pipelines = [
     # QUERY 2
     [   {"$lookup": {
             "from": "escola",
-            "localField": "escola.nome_esc",
-            "foreignField": "nome_esc",
+            "let": { "escolaNames": {
+                "$map": {
+                    "input": { "$ifNull": ["$escolas", []] },
+                    "as": "esc",
+                    "in": "$$esc.nome_esc"
+                }}
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {"$in": ["$nome_esc", "$$escolaNames"]} 
+                    }
+                }
+            ],
             "as": "escola"}
         },
         {"$unwind": "$escola"},
@@ -106,14 +135,26 @@ pipelines = [
     [   
         {"$lookup": {
             "from": "osc",
-            "localField": "parceria.osc_cnpj",
-            "foreignField": "cnpj",
+            "let": { "cnpjs": {
+                "$map": {
+                    "input": { "$ifNull": ["$parcerias", []] },
+                    "as": "par",
+                    "in": "$$par.osc_cnpj"
+                }}
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {"$in": ["$cnpj", "$$cnpjs"]} 
+                    }
+                }
+            ],
             "as": "osc"}
         },
         {"$unwind": "$osc"},
         {"$unwind": "$ambientes"},
         {"$group": {
-            "_id": {"school": "$nomeEsc", "ambient": "$ambientes.descAmb", "parceria": "$osc.nome"},
+            "_id": {"school": "$nome_esc", "ambient": "$ambientes.descAmb", "parceria": "$osc.nome_osc"},
             "total_ambients": {"$sum": 1}
         }},
         {"$project": {
@@ -128,12 +169,24 @@ pipelines = [
     #   QUERY 5
      [  {"$lookup": {
             "from": "escola",
-            "localField": "turma.nome_esc",
-            "foreignField": "nome_esc",
+            "let": { "escolaNames": {
+                "$map": {
+                    "input": { "$ifNull": ["$escolas", []] },
+                    "as": "esc",
+                    "in": "$$esc.nome_esc"
+                }}
+            },
+            "pipeline": [
+                {
+                    "$match": {
+                        "$expr": {"$in": ["$nome_esc", "$$escolaNames"]} 
+                    }
+                }
+            ],
             "as": "escola"}
         },
         {"$unwind": "$escola"},
-        {"$match": {"nascimento": {"$ne": None}}},
+        {"$match": {"data_nasc": {"$ne": None}}},
         {"$addFields": {
             "current_date": {
                 "$dateFromString": {
@@ -147,13 +200,13 @@ pipelines = [
             "age": {
                 "$subtract": [
                     {"$year": "$current_date"}, 
-                    {"$year": "$nascimento"}  
+                    {"$year": "$data_nasc"}  
                 ]
             }
         }},
         {"$group": {
             "dre": {"$first": "$escola.dre"},
-            "_id": "$turma.nome_esc",
+            "_id": "$escola.nome_esc",
             "average_age": {"$avg": "$age"}  
         }},
         {"$project": {
@@ -166,8 +219,12 @@ pipelines = [
     ]
 ]
 
+already_done = [1, 2, 3, 4]
 # Execute each pipeline and export results to CSV
 for i, pipeline in enumerate(pipelines, 1):
+    if i in already_done:
+        print(f"Query {i} already done, skipping...")
+        continue
     collection_name = ["aluno", "aluno", "turma", "escola", "aluno"][i-1]
     collection = db[collection_name]
     results = collection.aggregate(pipeline)
