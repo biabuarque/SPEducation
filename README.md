@@ -1,3 +1,9 @@
+
+## Grupo
+- Ana Beatriz Silva Buarque (257241)
+- Lucas Ribeiro Bortoletto (173422)
+
+
 # Justificativa
 ---
 # Recebemos o cenário B. Por que MongoDB seria a melhor resposta?
